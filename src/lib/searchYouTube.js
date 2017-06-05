@@ -1,25 +1,24 @@
-var searchYouTube = (options, callback) => {
+var searchYouTube = ({key, query = 'Hack Reactor', max = 5}, callback) => {
   // TODO
-  $.ajax({
-    type: 'GET',
-    url: 'https://www.googleapis.com/youtube/v3/search',
-    data: {
-      part: 'snippet',
-      key: options.key || window.YOUTUBE_API_KEY,
-      q: options.query || 'Hack Reactor',
-      maxResults: options.max || 5,
-      type: 'video',
-      videoEmbeddable: 'true'
-    },
-    success: function(data) {
-      callback(data.items);
-    },
-    error: function(data) {
-      throw new Error('Something went wrong, here is what was received', data);
+  $.get('https://www.googleapis.com/youtube/v3/search', {
+    part: 'snippet',
+    key: key,
+    q: query,
+    maxResults: max,
+    type: 'video',
+    videoEmbeddable: 'true'
+  })
+  .done(({items}) => {
+    if (callback) {
+      callback(items);
     }
+  })
+  .fail(({responseJSON}) => {
+    responseJSON.error.errors.forEach((error) =>
+      console.error(error)
+    );
   });
 
 };
 
 window.searchYouTube = searchYouTube;
-

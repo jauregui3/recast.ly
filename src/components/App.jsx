@@ -3,13 +3,9 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      video: null,
-      videos: [],
+      video: window.exampleVideoData[0],
+      videos: window.exampleVideoData,
     };
-    this.handleClick = this.handleClick.bind(this);
-    this.onFetchVideo = this.onFetchVideo.bind(this);
-    this.searchYouTube = this.props.searchYouTube;
-    this.handleSearchInput = this.handleSearchInput.bind(this);
   }
 
   handleClick(video) {
@@ -18,34 +14,39 @@ class App extends React.Component {
     }));
   }
 
-  onFetchVideo (items) {
-    this.setState(prevState => ({
-      video: items[0],
-      videos: items
-    }));
-  }
-
-  componentDidMount() {
-    console.log(this.props);
-    this.props.searchYouTube({}, this.onFetchVideo);
-  }
-
-  handleSearchInput (query) {
+  fetchVideos (query) {
     var options = {
+      key: this.API_KEY,
       query: query
     };
 
-    this.props.searchYouTube(options, this.onFetchVideo);
+    this.props.searchYouTube(options, (items) => {
+      this.setState(prevState => ({
+        video: items[0],
+        videos: items
+      }));
+    });
   }
+
+  componentDidMount() {
+    this.fetchVideos('Hack Reactor');
+  }
+
+  // handleSearchInput (query) {
+  //   var options = {
+  //     query: query
+  //   };
+
+    // this.props.searchYouTube(options, this.onFetchVideo);
 
   render() {
     return (<div>
-      <Nav handleSearchInput={handleSearchInput}/>
+      <Nav />
       <div className="col-md-7">
         <VideoPlayer video={this.state.video} />
       </div>
       <div className="col-md-5">
-        <VideoList videos={this.state.videos} handleClick={this.handleClick}/>
+        <VideoList videos={this.state.videos} handleClick={this.handleClick.bind(this)}/>
       </div>
     </div>
     );
