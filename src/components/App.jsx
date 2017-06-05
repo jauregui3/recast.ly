@@ -34,7 +34,7 @@ class App extends React.Component {
 
   render() {
     return (<div>
-      <Nav handleSearchInput={_.debounce(this.fetchVideos.bind(this), 500)}/>
+      <Nav handleSearchInput={this.fetchVideos.bind(this)}/>
       <div className="col-md-7">
         <VideoPlayer video={this.state.video} />
       </div>
