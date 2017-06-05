@@ -32,16 +32,9 @@ class App extends React.Component {
     this.fetchVideos('Hack Reactor');
   }
 
-  // handleSearchInput (query) {
-  //   var options = {
-  //     query: query
-  //   };
-
-    // this.props.searchYouTube(options, this.onFetchVideo);
-
   render() {
     return (<div>
-      <Nav />
+      <Nav handleSearchInput={this.fetchVideos.bind(this)}/>
       <div className="col-md-7">
         <VideoPlayer video={this.state.video} />
       </div>
